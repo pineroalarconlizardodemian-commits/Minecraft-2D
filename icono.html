@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; margin: 0; }
+        canvas { background: #87ceeb; image-rendering: pixelated; border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+    <canvas id="icon" width="512" height="512"></canvas>
+    <script>
+        const ctx = document.getElementById('icon').getContext('2d');
+        const S = 64; // Tamaño de cada bloque
+
+        // 1. Cielo (ya está en el CSS de fondo, pero pintamos el pasto y tierra abajo)
+        // Tierra
+        ctx.fillStyle = '#8b5a2b';
+        ctx.fillRect(0, 8 * S, 512, 512); 
+        // Pasto
+        ctx.fillStyle = '#3fa34d';
+        ctx.fillRect(0, 7 * S, 512, S);
+
+        // 2. Árbol (Tronco)
+        ctx.fillStyle = '#6b4423';
+        ctx.fillRect(3 * S, 3 * S, S, 4 * S); // Tronco de 1x4
+        // Hojas (Copo del árbol)
+        ctx.fillStyle = '#2d6a2d';
+        ctx.fillRect(2 * S, 1 * S, 3 * S, 2 * S); 
+        ctx.fillRect(1 * S, 2 * S, 5 * S, 2 * S);
+
+        // 3. Partículas de madera rompiéndose (efecto visual)
+        ctx.fillStyle = '#6b4423';
+        ctx.fillRect(4 * S + 10, 4 * S, 12, 12);
+        ctx.fillRect(4 * S + 25, 5 * S - 5, 8, 8);
+        ctx.fillRect(3 * S - 20, 6 * S, 10, 10);
+
+        // 4. El Jugador (Cubo rojo con ojos)
+        const playerX = 2 * S - 10; // Un poco a la izquierda del árbol
+        const playerY = 5 * S;
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillRect(playerX, playerY, S, 2 * S); // Cuerpo
+
+        // Ojos
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(playerX + 12, playerY + 16, 12, 12); // Ojo izquierdo
+        ctx.fillRect(playerX + 40, playerY + 16, 12, 12); // Ojo derecho
+        ctx.fillStyle = '#000';
+        ctx.fillRect(playerX + 18, playerY + 20, 6, 6); // Pupila izq
+        ctx.fillRect(playerX + 44, playerY + 20, 6, 6); // Pupila der
+
+        // Brazos (uno levantado rompiendo el árbol)
+        ctx.fillStyle = '#c0392b'; // Rojo más oscuro
+        ctx.fillRect(playerX + S - 10, playerY - 20, 20, 40); // Brazo golpeando
+
+        // Borde negro para que se vea como un ícono de app
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 20;
+        ctx.strokeRect(0, 0, 512, 512);
+
+    </script>
+</body>
+</html>
