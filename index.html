@@ -5,32 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Minecraft 2D</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
         canvas { display: block; width: 100%; height: 100%; touch-action: none; image-rendering: pixelated; }
+        
         #hud {
             position: absolute; top: 10px; left: 10px;
             color: #fff; font-family: monospace; font-size: 14px;
             text-shadow: 2px 2px 0 #000; pointer-events: none;
         }
+        
         #hotbar {
-            position: absolute; bottom: 10px; left: 50%;
-            transform: translateX(-50%); display: flex; gap: 4px;
+            position: absolute; top: 10px; right: 10px; /* Movido arriba a la derecha */
+            display: flex; gap: 4px;
             background: rgba(0,0,0,0.5); padding: 6px; border-radius: 6px;
         }
         .slot {
-            width: 48px; height: 48px; border: 2px solid #555;
+            width: 40px; height: 40px; border: 2px solid #555;
             display: flex; align-items: center; justify-content: center;
-            font-size: 10px; color: #fff; font-family: monospace;
-            background: rgba(255,255,255,0.1);
+            font-size: 8px; color: #fff; font-family: monospace; text-align: center;
+            background: rgba(255,255,255,0.1); pointer-events: auto;
         }
         .slot.active { border-color: #fff; background: rgba(255,255,255,0.3); }
+
+        /* --- CONTROLES TÁCTILES --- */
+        #controls {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 40%;
+            pointer-events: none; /* Deja pasar los toques al canvas excepto en los botones */
+        }
+
+        #joystick-base {
+            position: absolute; bottom: 30px; left: 30px;
+            width: 120px; height: 120px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3);
+            pointer-events: auto; touch-action: none;
+        }
+
+        #joystick-knob {
+            position: absolute; top: 50%; left: 50%;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        #action-buttons {
+            position: absolute; bottom: 30px; right: 30px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            pointer-events: auto;
+        }
+
+        .btn {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5);
+            color: white; font-family: sans-serif; font-weight: bold; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+            text-shadow: 1px 1px 2px #000; touch-action: none;
+        }
+        .btn:active { background: rgba(255,255,255,0.4); }
+        
+        /* Botón de saltar un poco más grande */
+        #btn-jump { grid-column: span 2; width: 100%; border-radius: 35px; height: 60px; }
     </style>
 </head>
 <body>
     <canvas id="game"></canvas>
-    <div id="hud">Bloque: <span id="selected">Tierra</span> | FPS: <span id="fps">0</span></div>
+    
+    <div id="hud">Bloque: <span id="selected">Césped</span> | FPS: <span id="fps">0</span></div>
+    
+    <!-- Hotbar movido arriba a la derecha para que no choque con los botones -->
     <div id="hotbar"></div>
+
+    <!-- Controles táctiles -->
+    <div id="controls">
+        <div id="joystick-base">
+            <div id="joystick-knob"></div>
+        </div>
+        
+        <div id="action-buttons">
+            <div class="btn" id="btn-break">Romper</div>
+            <div class="btn" id="btn-place">Poner</div>
+            <div class="btn" id="btn-jump">Saltar</div>
+        </div>
+    </div>
+
     <script src="js/blocks.js"></script>
     <script src="js/world.js"></script>
     <script src="js/player.js"></script>
